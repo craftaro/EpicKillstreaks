@@ -36,9 +36,6 @@ killstreaks:
         # When remember hits is enabled, it will not add time if time was just added.
         # It will make it so hitting frequently does not stack. It will cancel the old and refresh the combat time.
         remember-hits: true
-        # The time in seconds to keep the last hit in memory.
-        # This value needs to be lower than the "combat-add-time" setting.
-        remember-time: 5
     # Smart killstreaks will determine if the attacker is about to enter combat or is in combat.
     # Killstreaks will find the best time to lower and raise killstreak times.
     smart:
