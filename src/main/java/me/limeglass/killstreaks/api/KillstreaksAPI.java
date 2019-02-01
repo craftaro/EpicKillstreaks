@@ -1,5 +1,8 @@
 package me.limeglass.killstreaks.api;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
@@ -47,6 +50,20 @@ public class KillstreaksAPI {
 	 */
 	public static boolean registerCheck(KillstreakCheck check) {
 		return CheckManager.registerCheck(check);
+	}
+	
+	/**
+	 * @return Collection<Class<? extends KillstreakSubtractor>> of all the registered classes of KillstreakSubtractor.
+	 */
+	public static Collection<Class<? extends KillstreakSubtractor>> getSubtractors() {
+		return Collections.unmodifiableCollection(SubtractorManager.getSubtractors().values());
+	}
+	
+	/**
+	 * @return List<KillstreakSubtractor> of all the running KillstreakSubtractor.
+	 */
+	public static List<KillstreakSubtractor> getRunningSubtractors() {
+		return SubtractorManager.getRunningSubtractors();
 	}
 	
 	/**
