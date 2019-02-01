@@ -51,6 +51,7 @@ public class SubtractorManager {
 							subtractor.interrupt(event);
 							return;
 						}
+						Killstreaks.debugMessage("Starting Subtractor " + subtractor.getClass().getName() + " for " + player.getName() + " at killstreak " + subtractor.getKillstreak().getStreak());
 						running.add(subtractor);
 						subtractor.onStart(event);
 					} catch (NoSuchMethodException e) {
@@ -65,6 +66,7 @@ public class SubtractorManager {
 	public static void finish(KillstreakSubtractor subtractor) {
 		if (running.contains(subtractor)) {
 			running.remove(subtractor);
+			Killstreaks.debugMessage("&eFinished Subtractor " + subtractor.getClass().getName() + " for " + subtractor.getPlayer().getName() + " going to killstreak " + (subtractor.getKillstreak().getStreak() - 1));
 			subtractor.getKillstreak().subtract();
 		}
 	}

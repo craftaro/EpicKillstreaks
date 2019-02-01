@@ -29,7 +29,7 @@ public class TimeSubtractor extends KillstreakSubtractor {
 			public void run() {
 				finish();
 			}
-		}, time);
+		}, (time * 20) * 60);
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package me.limeglass.killstreaks.subtractors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
@@ -12,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.RayTraceResult;
 
 import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.KillstreakSubtractor;
@@ -21,16 +24,14 @@ public class SmartSubtractor extends KillstreakSubtractor {
 	static {
 		ConfigurationSection section = Killstreaks.getInstance().getConfig().getConfigurationSection("killstreaks.smart");
 		time = section.getInt("remember-time", 30);
-		/*x = section.getInt("x-radius", 20);
-		y = section.getInt("y-radius", 20);
-		z = section.getInt("z-radius", 20);
-		*/registerSubtractor("Smart", SmartSubtractor.class);
+		radius = section.getInt("radius", 20);
+		registerSubtractor("Smart", SmartSubtractor.class);
 	}
 	
 	private long hitTime = System.currentTimeMillis();
-	private static int time, trys;//, x, y, z;
+	private static int time, trys, radius;
 	private BukkitTask timer;
-	private boolean finish;
+	private Check check;
 	private Event last;
 	
 	public SmartSubtractor(Player player) {
@@ -60,10 +61,32 @@ public class SmartSubtractor extends KillstreakSubtractor {
 						}
 					}
 				} else if (e instanceof EntityTargetEvent) {
-					//EntityTargetEvent event = (EntityTargetEvent) e;
+					EntityTargetEvent event = (EntityTargetEvent) e;
+					LivingEntity entity = (LivingEntity) ((EntityTargetEvent) e).getEntity();
+					check = new Check(entity, event.getTarget());
 				}
 			}
 		}, EntityDamageByEntityEvent.class, EntityTargetEvent.class);
+	}
+	
+	private class Check {
+		
+		private final LivingEntity entity;
+		private final Entity target;
+		
+		public Check(LivingEntity entity, Entity target) {
+			this.entity = entity;
+			this.target = target;
+		}
+		
+		public LivingEntity getEntity() {
+			return entity;
+		}
+
+		public Entity getTarget() {
+			return target;
+		}		
+		
 	}
 
 	@Override
@@ -71,18 +94,28 @@ public class SmartSubtractor extends KillstreakSubtractor {
 		timer = Bukkit.getScheduler().runTaskTimerAsynchronously(Killstreaks.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				if (finish || trys > time * 2) {
+				if (check != null) {
+					Location eye = check.getEntity().getEyeLocation();
+					RayTraceResult result = eye.getWorld().rayTraceEntities(eye, check.getTarget().getLocation().toVector(), radius);
+					Entity entity = result.getHitEntity();
+					if (entity != null && entity == check.getTarget()) {
+						interrupt(event);
+					} else {
+						check = null;
+					}
+				} else if (trys > time * 2) {
 					timer.cancel();
 					finish();
 				}
 				trys++;
 			}
-		}, 0, 20); // Every second.
+		}, 0, (time * 20) * 60);
 	}
 
 	@Override
 	public void interrupt(EntityDamageByEntityEvent event) {
 		hitTime = System.currentTimeMillis();
+		trys = 0;
 	}
 
 }

@@ -119,7 +119,7 @@ effects:
             # %attacker%, %attacker-display%, %victim%, %receiver% and %streak% are current placeholders.
             # The %attacker-display% placeholder is their display name, aka permissions/essentials thing name.
             # The %receiver% placeholder is the player receiving the broadcast.
-            message: "&7[&eKillstreaks&7] &6%attacker% is on a killstreak of &6%streak%!"
+            message: "&6%attacker% &cis on a &6%streak% &ckillstreak!"
         # Message rather than broadcasting, keep in mind that broadcasting is the opposite of this.
         # Disable broadcasting to then have this enabled.
         message:
@@ -147,5 +147,5 @@ effects:
             # %attacker%, %attacker-display%, %victim%, %receiver% and %streak% are current placeholders.
             # The %attacker-display% placeholder is their display name, aka permissions/essentials thing name.
             # The %receiver% placeholder is the player receiving the message.
-            message: "&7[&eKillstreaks&7] &cYou're on a killstreak of &6%streak%!"
+            message: "&cYou're on a &6%streak% &ckillstreak!"
 

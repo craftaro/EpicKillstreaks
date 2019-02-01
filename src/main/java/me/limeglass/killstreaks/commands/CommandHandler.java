@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.limeglass.killstreaks.Killstreaks;
+import me.limeglass.killstreaks.utils.Utils;
 
 public class CommandHandler implements CommandExecutor {
 	
@@ -16,17 +17,18 @@ public class CommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) sender;
-		if (args.length >= 1) {
+		/*if (args.length >= 1) {
 			if (args[0].equalsIgnoreCase("admin") && player.hasPermission("champions.admin")) {
 				//player.sendMessage(Utils.getMessage(false, "adminhelp", player));
 			} else if (args[0].equalsIgnoreCase("setspawn") && player.hasPermission("champions.admin")) {
 				//player.sendMessage(Utils.getMessage(true, "setspawn", player));
 			} else {
-				player.performCommand("/champions");
+				player.performCommand("/killstreaks");
 			}
 		} else {
 			//player.sendMessage(Utils.getMessage(false, "commandhelp", player));
-		}
+		}*/
+		player.sendMessage(Utils.cc("&6Coming soon."));
 		return true;
 	}
 

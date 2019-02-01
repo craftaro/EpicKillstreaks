@@ -7,12 +7,28 @@ import org.bukkit.entity.Player;
 import me.limeglass.killstreaks.managers.ActionManager;
 import me.limeglass.killstreaks.managers.CheckManager;
 import me.limeglass.killstreaks.managers.KillstreakManager;
+import me.limeglass.killstreaks.managers.SubtractorManager;
 import me.limeglass.killstreaks.objects.Killstreak;
 import me.limeglass.killstreaks.objects.KillstreakAction;
 import me.limeglass.killstreaks.objects.KillstreakCheck;
+import me.limeglass.killstreaks.objects.KillstreakSubtractor;
 
 public class KillstreaksAPI {
 
+	/**
+	 * Register a subtractor to Killstreaks.
+	 * Subtractors are what subtract the killstreaks over time or any way needed.
+	 * It will be called and when it's ready it calls the finish() method.
+	 * When the finish method is called, the killstreaks will get subtracted by one.
+	 * 
+	 * @param name The name to be set in the configuration to use that Subtractor.
+	 * @param subtractor The class that extends KillstreakSubtractor
+	 * @return The registered Class<? extends KillstreakSubtractor>
+	 */
+	public static Class<? extends KillstreakSubtractor> registerSubtractor(String name, Class<? extends KillstreakSubtractor> subtractor) {
+		return SubtractorManager.registerSubtractor(name, subtractor);
+	}
+	
 	/**
 	 * Register an action to Killstreaks
 	 * Actions are extendible effects that get triggered on Killstreaks.

@@ -21,7 +21,7 @@ public class ArmorCheck extends KillstreakCheck {
 	@Override
 	public boolean check(EntityDamageByEntityEvent event) {
 		CheckReader reader = new CheckReader("armor-blacklist");
-		if (reader.isValid()) {
+		if (reader.isValid() && reader.isEnabled()) {
 			Player attacker = (Player)event.getDamager();
 			Stream<Material> stream = reader.getList().parallelStream()
 					.map(string -> {
