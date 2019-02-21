@@ -1,7 +1,5 @@
 package me.limeglass.killstreaks.actions;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -10,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.limeglass.killstreaks.objects.Killstreak;
 import me.limeglass.killstreaks.objects.KillstreakAction;
-import me.limeglass.killstreaks.utils.Utils;
+import me.limeglass.killstreaks.utils.MessageBuilder;
 
 public class BroadcastAction extends KillstreakAction {
 
@@ -33,44 +31,34 @@ public class BroadcastAction extends KillstreakAction {
 			if (section.getBoolean("broadcast.enabled", false)) {
 				section = section.getConfigurationSection("broadcast");
 				if (section.getIntegerList("streaks").contains(streak)) {
-					String message = section.getString("message", "&6%attacker% &cis on a &6%streak% &ckillstreak!");
-					message = message.replaceAll("%attacker%", attacker.getName());
-					message = message.replaceAll("%victim%", victim.getName());
-					message = message.replaceAll("%streak%", streak + "");
-					boolean all = section.getBoolean("all-worlds", true);
-					boolean whitelist = section.getBoolean("world-whitelist", false);
-					List<String> worlds = section.getStringList("worlds");
 					for (Player player : Bukkit.getOnlinePlayers()) {
-						String clone = message.replaceAll("%receiver%", player.getName());
-						String world = player.getWorld().getName();
-						if (all) {
-							player.sendMessage(Utils.cc(clone));
-						} else if (whitelist) {
-							if (worlds.contains(world)) {
-								player.sendMessage(Utils.cc(clone));
-							}
-						} else if (!worlds.contains(world)) {
-							player.sendMessage(Utils.cc(clone));
-						}
+						new MessageBuilder(section, "message")
+								.replace("%attacker%", attacker.getName())
+								.replace("%receiver%", player.getName())
+								.replace("%victim%", victim.getName())
+								.setKillstreak(killstreak)
+								.send(player);
 					}
 				}
 			} else if (section.getBoolean("message.enabled", false)) {
 				section = section.getConfigurationSection("message");
 				if (section.getIntegerList("streaks").contains(streak)) {
-					String message = section.getString("message", "&6%attacker% &cis on a &6%streak% &ckillstreak!");
-					message = message.replaceAll("%attacker%", attacker.getName());
-					message = message.replaceAll("%victim%", victim.getName());
-					message = message.replaceAll("%streak%", streak + "");
+					MessageBuilder builder = new MessageBuilder(section, "message")
+							.replace("%attacker%", attacker.getName())
+							.replace("%victim%", victim.getName())
+							.setKillstreak(killstreak);
 					boolean victimSent = false, attackerSent = false;
 					if (section.getBoolean("message-attacker", false)) {
-						String clone = message.replaceAll("%receiver%", attacker.getName());
-						attacker.sendMessage(Utils.cc(clone));
+						builder.replace("%receiver%", attacker.getName())
+								.send(attacker);
 						attackerSent = true;
 					}
 					if (section.getBoolean("message-victim", false) && attacker != victim) {
-						String clone = message.replaceAll("%receiver%", victim.getName());
-						victim.sendMessage(Utils.cc(clone));
-						victimSent = true;
+						if (victim instanceof Player) {
+							builder.replace("%receiver%", victim.getName())
+									.send((Player) victim);
+							victimSent = true;
+						}
 					}
 					boolean radius = section.getBoolean("radius.enabled", false);
 					int x = section.getInt("radius.x-radius", 20);
@@ -82,8 +70,8 @@ public class BroadcastAction extends KillstreakAction {
 								(victimSent && player == victim)) {
 							continue;
 						}
-						String clone = message.replaceAll("%receiver%", player.getName());
-						player.sendMessage(Utils.cc(clone));
+						builder.replace("%receiver%", player.getName())
+								.send(player);
 					}
 				}
 			}

@@ -109,7 +109,7 @@ public class SmartSubtractor extends KillstreakSubtractor {
 				}
 				trys++;
 			}
-		}, 0, (time * 20) * 60);
+		}, 0, time * 20);
 	}
 
 	@Override

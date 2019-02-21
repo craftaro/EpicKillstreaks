@@ -71,7 +71,7 @@ public class CombatSubtractor extends KillstreakSubtractor {
 			public void run() {
 				finish();
 			}
-		}, (time * 20) * 60);
+		}, time * 20);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.Set;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.Killstreak;
 import me.limeglass.killstreaks.objects.KillstreakAction;
 
@@ -29,7 +30,10 @@ public class ActionManager {
 					}
 					return action;
 				})
-				.forEach(action -> action.onKillstreak(event, killstreak));
+				.forEach(action -> {
+					Killstreaks.debugMessage("&dCalled Action " + action.getClass().getName());
+					action.onKillstreak(event, killstreak);
+				});
 	}
 	
 }

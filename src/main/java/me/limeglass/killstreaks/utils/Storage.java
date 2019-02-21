@@ -77,7 +77,7 @@ public class Storage {
 			try {
 				writer = new FileWriter(file);
 				writer.append(NEW_LINE);
-				writer.append("# AussieMC flat file Kitpvp database.");
+				writer.append("# Killstreaks flat file database.");
 				writer.append(NEW_LINE);
 				writer.append("# Please do not modify this file manually, thank you!");
 				writer.append(NEW_LINE);
@@ -113,7 +113,7 @@ public class Storage {
 			}
 			writer = new FileWriter(file);
 			writer.append(NEW_LINE);
-			writer.append("# AussieMC flat file Kitpvp database.");
+			writer.append("# Killstreaks flat file database.");
 			writer.append(NEW_LINE);
 			writer.append("# Please do not modify this file manually, thank you!");
 			writer.append(NEW_LINE);
@@ -138,7 +138,7 @@ public class Storage {
 		try {
 			writer = new FileWriter(file);
 			writer.append(NEW_LINE);
-			writer.append("# AussieMC flat file Kitpvp database.");
+			writer.append("# Killstreaks flat file database.");
 			writer.append(NEW_LINE);
 			writer.append("# Please do not modify this file manually, thank you!");
 			writer.append(NEW_LINE);
@@ -213,6 +213,6 @@ public class Storage {
 				Killstreaks.consoleMessage("Data has been saved!");
 				save(true, true);
 			}
-		}, 1, (20 * 60) * Killstreaks.getInstance().getConfig().getInt("Data.backup-timer", 60)); //60 minutes by default
+		}, 1, (20 * 60) * Killstreaks.getInstance().getConfig().getInt("database.backup-timer", 60)); //60 minutes by default
 	}
 }

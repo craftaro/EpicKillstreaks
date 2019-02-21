@@ -14,6 +14,7 @@ import java.util.jar.JarFile;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +39,40 @@ public class Utils {
 		return true;
 	}
 	
+	/**
+	 * Tests whether a given class exists in the classpath.
+	 * 
+	 * @author Skript team.
+	 * @param className The {@link Class#getCanonicalName() canonical name} of the class
+	 * @return Whether the given class exists.
+	 */
+	public static boolean classExists(String className) {
+		try {
+			Class.forName(className);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Tests whether a method exists in the given class.
+	 * 
+	 * @author Skript team.
+	 * @param c The class
+	 * @param methodName The name of the method
+	 * @param parameterTypes The parameter types of the method
+	 * @return Whether the given method exists.
+	 */
+	public static boolean methodExists(Class<?> c, String methodName, Class<?>... parameterTypes) {
+		try {
+			c.getDeclaredMethod(methodName, parameterTypes);
+			return true;
+		} catch (NoSuchMethodException | SecurityException e) {
+			return false;
+		}
+	}
+	
 	private static JarFile getJar(JavaPlugin plugin) {
 		try {
 			Method method = JavaPlugin.class.getDeclaredMethod("getFile");
@@ -48,6 +83,20 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static Sound soundAttempt(String attempt, String fallback) {
+		Sound sound = null;
+		try {
+			sound = Sound.valueOf(attempt);
+		} catch (Exception e) {
+			try {
+				sound = Sound.valueOf(fallback);
+			} catch (Exception e1) {}
+		}
+		if (sound == null)
+			sound = Sound.ENTITY_PLAYER_LEVELUP;
+		return sound;
 	}
 	
 	public static void loadClasses(JavaPlugin plugin, String basePackage, String... subPackages) {

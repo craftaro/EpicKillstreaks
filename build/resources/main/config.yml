@@ -25,7 +25,7 @@ killstreaks:
     # Time is a simple and basic time measurement. It decreases the killstreaks based on time.
     time:
         # The time in seconds it takes for a Killstreak to be subtracted after being gained.
-        subtraction-time: 10
+        subtraction-time: 20
     # Combat will determine times when the user is or isn't in combat for Killstreaks.
     combat:
         # When the attacker deals damage, should time be added?
@@ -88,8 +88,9 @@ armor-blacklist:
         - "Iron_Chestplate"
         - "Chainmail_Leggings"
         - "Golden_Boots"
-
+        
 # Configure all the effects here.
+# All messages have placeholders: %attacker%, %receiver%, and %victim%
 effects:
     # Sounds for the Killstreaks.
     sound:
@@ -108,14 +109,6 @@ effects:
                 - 20
                 - 25
                 - 30
-            # Override the settings below and just ignore them. Set this to false if you want customization.
-            all-worlds: true
-            # If the world list below should be a whitelist or blacklist.
-            world-whitelist: false
-            # The worlds to broadcast to.
-            worlds:
-                - "world"
-                - "exampleworld"
             # %attacker%, %attacker-display%, %victim%, %receiver% and %streak% are current placeholders.
             # The %attacker-display% placeholder is their display name, aka permissions/essentials thing name.
             # The %receiver% placeholder is the player receiving the broadcast.
@@ -148,4 +141,52 @@ effects:
             # The %attacker-display% placeholder is their display name, aka permissions/essentials thing name.
             # The %receiver% placeholder is the player receiving the message.
             message: "&7[&eKillstreaks&7] &cYou're on a killstreak of &6%streak%!"
+    actionbar:
+        enabled: true
+        # At which streaks should the message be broadcasted.
+        streaks:
+            - 3
+            - 5
+            - 10
+            - 15
+            - 20
+            - 25
+            - 30
+        message-self: "&cYou're on a killstreak of &6%streak%!"
+        message-others: "&c%attacker% is on a killstreak of &6%streak%!"
+        radius:
+            enabled: false
+            x-radius: 20
+            y-radius: 20
+            z-radius: 20
+    title:
+        # At which streaks should the message be broadcasted.
+        streaks:
+            - 3
+            - 5
+            - 10
+            - 15
+            - 20
+            - 25
+            - 30
+        title-self:
+            enabled: false
+            title: ""
+            subtitle: "&c&lYou're on a Killstreak of %streak%!"
+            fadeOut: 20
+            fadeIn: 20
+            stay: 200
+        title-others:
+            enabled: false
+            title: "&c&lKillsteak"
+            subtitle: "&c%attacker% is on a Killstreak of %streak%!"
+            fadeOut: 20
+            fadeIn: 20
+            stay: 200
+        radius:
+            enabled: false
+            x-radius: 20
+            y-radius: 20
+            z-radius: 20
+        
 
