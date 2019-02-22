@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.KillstreakCheck;
 import me.limeglass.killstreaks.utils.CheckReader;
 
@@ -20,7 +19,7 @@ public class ArmorCheck extends KillstreakCheck {
 
 	@Override
 	public boolean check(EntityDamageByEntityEvent event) {
-		CheckReader reader = new CheckReader("armor-blacklist");
+		CheckReader reader = new CheckReader("armor-blacklist", configuration);
 		if (reader.isValid() && reader.isEnabled()) {
 			Player attacker = (Player)event.getDamager();
 			Stream<Material> stream = reader.getList().parallelStream()
@@ -29,7 +28,7 @@ public class ArmorCheck extends KillstreakCheck {
 						try {
 							material = Material.valueOf(string.toUpperCase());
 						} catch (Exception e) {
-							Killstreaks.getInstance().getLogger().log(Level.SEVERE, "There was no Material found under the name: " + string);
+							instance.getLogger().log(Level.SEVERE, "There was no Material found under the name: " + string);
 						}
 						return material;
 					});

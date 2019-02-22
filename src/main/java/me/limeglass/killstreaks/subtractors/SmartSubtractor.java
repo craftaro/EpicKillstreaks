@@ -16,26 +16,26 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.RayTraceResult;
 
-import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.KillstreakSubtractor;
 
 public class SmartSubtractor extends KillstreakSubtractor {
 
 	static {
-		ConfigurationSection section = Killstreaks.getInstance().getConfig().getConfigurationSection("killstreaks.smart");
-		time = section.getInt("remember-time", 30);
-		radius = section.getInt("radius", 20);
 		registerSubtractor("Smart", SmartSubtractor.class);
 	}
 	
 	private long hitTime = System.currentTimeMillis();
-	private static int time, trys, radius;
+	private final ConfigurationSection section;
+	private int time, trys, radius;
 	private BukkitTask timer;
 	private Check check;
 	private Event last;
 	
 	public SmartSubtractor(Player player) {
 		super(player);
+		this.section = configuration.getConfigurationSection("killstreaks.smart");
+		this.time = section.getInt("remember-time", 30);
+		this.radius = section.getInt("radius", 20);
 		registerExecutor(new EventExecutor() {
 			@Override
 			public void execute(Listener listener, Event e) throws EventException {
@@ -91,7 +91,7 @@ public class SmartSubtractor extends KillstreakSubtractor {
 
 	@Override
 	public void onStart(EntityDamageByEntityEvent event) {
-		timer = Bukkit.getScheduler().runTaskTimerAsynchronously(Killstreaks.getInstance(), new Runnable() {
+		timer = Bukkit.getScheduler().runTaskTimerAsynchronously(instance, new Runnable() {
 			@Override
 			public void run() {
 				if (check != null) {

@@ -22,47 +22,47 @@ public class ActionbarAction extends KillstreakAction {
 
 	@Override
 	public void onKillstreak(EntityDamageByEntityEvent event, Killstreak killstreak) {
-		if (getConfiguration().isConfigurationSection("effects.actionbar")) {
-			Player attacker = killstreak.getPlayer();
-			Entity victim = event.getEntity();
-			ConfigurationSection section = getConfiguration().getConfigurationSection("effects.actionbar");
-			int streak = killstreak.getStreak();
-			if (section.getBoolean("enabled", false)) {
-				if (section.getIntegerList("streaks").contains(streak)) {
-					if (section.getBoolean("radius.enabled", false)) {
-						int x = section.getInt("radius.x-radius", 20);
-						int y = section.getInt("radius.y-radius", 20);
-						int z = section.getInt("radius.z-radius", 20);
-						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (!attacker.getNearbyEntities(x, y, z).contains(player))
-								continue;
-							MessageBuilder builder = new MessageBuilder(section, "message-others")
-									.replace("%attacker%", attacker.getName())
-									.replace("%victim%", victim.getName())
-									.setKillstreak(killstreak);
-							if (player == attacker)
-								builder.setNodes("message-self")
-										.replace("%receiver%", player.getName())
-										.sendActionbar(player);
-							else
-								builder.replace("%receiver%", attacker.getName())
-										.sendActionbar(attacker);
-						}
-						return;
-					}
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						MessageBuilder builder = new MessageBuilder(section, "message-others")
-								.replace("%attacker%", attacker.getName())
-								.replace("%receiver%", player.getName())
-								.replace("%victim%", victim.getName())
-								.setKillstreak(killstreak);
-						if (player == attacker)
-							builder.setNodes("message-self").sendActionbar(attacker);
-						else
-							builder.sendActionbar(player);
-					}
-				}
+		if (!configuration.isConfigurationSection("effects.actionbar"))
+			return;
+		Player attacker = killstreak.getPlayer();
+		Entity victim = event.getEntity();
+		ConfigurationSection section = configuration.getConfigurationSection("effects.actionbar");
+		int streak = killstreak.getStreak();
+		if (!section.getBoolean("enabled", false))
+			return;
+		if (!section.getIntegerList("streaks").contains(streak))
+			return;
+		if (section.getBoolean("radius.enabled", false)) {
+			int x = section.getInt("radius.x-radius", 20);
+			int y = section.getInt("radius.y-radius", 20);
+			int z = section.getInt("radius.z-radius", 20);
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (!attacker.getNearbyEntities(x, y, z).contains(player))
+					continue;
+				MessageBuilder builder = new MessageBuilder(section, "message-others")
+						.replace("%attacker%", attacker.getName())
+						.replace("%victim%", victim.getName())
+						.setKillstreak(killstreak);
+				if (player == attacker)
+					builder.setNodes("message-self")
+							.replace("%receiver%", player.getName())
+							.sendActionbar(player);
+				else
+					builder.replace("%receiver%", attacker.getName())
+							.sendActionbar(attacker);
 			}
+			return;
+		}
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			MessageBuilder builder = new MessageBuilder(section, "message-others")
+					.replace("%attacker%", attacker.getName())
+					.replace("%receiver%", player.getName())
+					.replace("%victim%", victim.getName())
+					.setKillstreak(killstreak);
+			if (player == attacker)
+				builder.setNodes("message-self").sendActionbar(attacker);
+			else
+				builder.sendActionbar(player);
 		}
 	}
 	

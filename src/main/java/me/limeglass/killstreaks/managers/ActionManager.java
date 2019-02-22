@@ -23,17 +23,10 @@ public class ActionManager {
 	}
 	
 	public static void call(EntityDamageByEntityEvent event, Killstreak killstreak, FileConfiguration configuration) {
-		actions.parallelStream()
-				.map(action -> {
-					if (action.getConfiguration() == null) {
-						action.setConfiguration(configuration);
-					}
-					return action;
-				})
-				.forEach(action -> {
-					Killstreaks.debugMessage("&dCalled Action " + action.getClass().getName());
-					action.onKillstreak(event, killstreak);
-				});
+		for (KillstreakAction action : actions) {
+			Killstreaks.debugMessage("&dCalled Action " + action.getClass().getName());
+			action.onKillstreak(event, killstreak);
+		}
 	}
 	
 }

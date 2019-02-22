@@ -14,7 +14,7 @@ public class EntityCheck extends KillstreakCheck {
 
 	@Override
 	public boolean check(EntityDamageByEntityEvent event) {
-		CheckReader reader = new CheckReader("entity-blacklist");
+		CheckReader reader = new CheckReader("entity-blacklist", configuration);
 		if (reader.isValid() && reader.isEnabled()) {
 			boolean contains = reader.getList().parallelStream()
 					.map(string -> EntityType.valueOf(string.toUpperCase()))

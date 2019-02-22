@@ -12,27 +12,27 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.KillstreakSubtractor;
 
 public class CombatSubtractor extends KillstreakSubtractor {
 
 	static {
-		ConfigurationSection section = Killstreaks.getInstance().getConfig().getConfigurationSection("killstreaks.combat");
-		remember = section.getBoolean("remember-hits", false);
-		rememberTime = section.getInt("remember-time", 5);
-		time = section.getInt("combat-add-time", 10);
 		registerSubtractor("Combat", CombatSubtractor.class);
 	}
 	
 	private long hitTime = System.currentTimeMillis();
-	private static int time, rememberTime;
-	private static boolean remember;
+	private final ConfigurationSection section;
+	private int time, rememberTime;
+	private boolean remember;
 	private BukkitTask timer;
 	private Event last; 
 	
 	public CombatSubtractor(Player player) {
 		super(player);
+		this.section = configuration.getConfigurationSection("killstreaks.combat");
+		this.remember = section.getBoolean("remember-hits", false);
+		this.rememberTime = section.getInt("remember-time", 5);
+		time = section.getInt("combat-add-time", 10);
 		registerExecutor(new EventExecutor() {
 			@Override
 			public void execute(Listener listener, Event event) throws EventException {
@@ -66,7 +66,7 @@ public class CombatSubtractor extends KillstreakSubtractor {
 
 	@Override
 	public void onStart(EntityDamageByEntityEvent event) {
-		timer = Bukkit.getScheduler().runTaskLaterAsynchronously(Killstreaks.getInstance(), new Runnable() {
+		timer = Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
 			@Override
 			public void run() {
 				finish();

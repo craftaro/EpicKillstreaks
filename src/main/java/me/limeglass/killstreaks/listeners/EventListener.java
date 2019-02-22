@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.PluginManager;
 
 import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.managers.ActionManager;
@@ -21,6 +22,14 @@ import me.limeglass.killstreaks.objects.Killstreak;
 import me.limeglass.killstreaks.objects.KillstreakEvent;
 
 public class EventListener implements Listener {
+	
+	private final PluginManager pluginManager;
+	private final Killstreaks instance;
+	
+	public EventListener(Killstreaks instance) {
+		this.pluginManager = instance.getServer().getPluginManager();
+		this.instance = instance;
+	}
 	
 	@EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
@@ -35,13 +44,12 @@ public class EventListener implements Listener {
 			EntityDamageByEntityEvent event = (EntityDamageByEntityEvent)damage;
 			Entity attacker = event.getDamager();
 			if (attacker.getType() == EntityType.PLAYER) {
-				Killstreaks instance = Killstreaks.getInstance();
 				FileConfiguration configuration = instance.getConfig();
 				if (CheckManager.call(event, configuration)) {
 					Player player = (Player)attacker;
 					Killstreak killstreak = KillstreakManager.getKillstreak(player);
 					KillstreakEvent killstreakEvent = new KillstreakEvent(player, killstreak, killstreak.getStreak() + 1);
-					instance.getServer().getPluginManager().callEvent(killstreakEvent);
+					pluginManager.callEvent(killstreakEvent);
 					if (!killstreakEvent.isCancelled()) {
 						ActionManager.call(event, killstreak.increment(), configuration);
 						SubtractorManager.start(event, killstreak, configuration);

@@ -22,29 +22,29 @@ public class SoundAction extends KillstreakAction {
 
 	@Override
 	public void onKillstreak(EntityDamageByEntityEvent event, Killstreak killstreak) {
-		if (getConfiguration().isConfigurationSection("effects.sound")) {
-			Player attacker = killstreak.getPlayer();
-			ConfigurationSection section = getConfiguration().getConfigurationSection("effects.sound");
-			int streak = killstreak.getStreak();
-			if (section.getBoolean("enabled", false)) {
-				if (section.getIntegerList("streaks").contains(streak)) {
-					Sound sound = Utils.soundAttempt(section.getString("sound"), "click");
-					float volume = section.getInt("volume") + (section.getInt("volume-addition") * streak);
-					float pitch = section.getInt("pitch") + (section.getInt("pitch-addition") * streak);
-					if (section.getBoolean("location", false)) {
-						attacker.getWorld().playSound(attacker.getLocation(), sound, volume, pitch);
-						return;
-					}
-					if (section.getBoolean("attacker-only", false)) {
-						attacker.playSound(attacker.getLocation(), sound, volume, pitch);
-						return;
-					}
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						player.playSound(player.getLocation(), sound, volume, pitch);
-					}
-				}
-			}
+		if (!configuration.isConfigurationSection("effects.sound"))
+			return;
+		Player attacker = killstreak.getPlayer();
+		ConfigurationSection section = configuration.getConfigurationSection("effects.sound");
+		int streak = killstreak.getStreak();
+		if (!section.getBoolean("enabled", false))
+			return;
+		if (!section.getIntegerList("streaks").contains(streak))
+			return;
+		Sound sound = Utils.soundAttempt(section.getString("sound"), "click");
+		float volume = section.getInt("volume") + (section.getInt("volume-addition") * streak);
+		float pitch = section.getInt("pitch") + (section.getInt("pitch-addition") * streak);
+		if (section.getBoolean("location", false)) {
+			attacker.getWorld().playSound(attacker.getLocation(), sound, volume, pitch);
+			return;
+		}
+		if (section.getBoolean("attacker-only", false)) {
+			attacker.playSound(attacker.getLocation(), sound, volume, pitch);
+			return;
+		}
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.playSound(player.getLocation(), sound, volume, pitch);
 		}
 	}
-	
+
 }

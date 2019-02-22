@@ -1,22 +1,23 @@
 package me.limeglass.killstreaks.objects;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.EventExecutor;
+import org.bukkit.plugin.PluginManager;
 
-import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.managers.SubtractorManager;
 
 public abstract class KillstreakSubtractor extends KillstreakElement {
 
+	private final PluginManager pluginManager;
 	protected Killstreak killstreak;
 	private final Player player;
 	
 	public KillstreakSubtractor(Player player) {
+		this.pluginManager = instance.getServer().getPluginManager();
 		this.player = player;
 	}
 	
@@ -27,7 +28,7 @@ public abstract class KillstreakSubtractor extends KillstreakElement {
 	@SafeVarargs
 	protected final void registerExecutor(EventExecutor executor, Class<? extends Event>... events) {
 		for (Class<? extends Event> event : events) {
-			Bukkit.getPluginManager().registerEvent(event, new Listener(){}, EventPriority.LOW, executor, Killstreaks.getInstance());
+			pluginManager.registerEvent(event, new Listener(){}, EventPriority.LOW, executor, instance);
 		}
 	}
 	

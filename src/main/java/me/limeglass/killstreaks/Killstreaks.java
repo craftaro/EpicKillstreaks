@@ -22,7 +22,7 @@ public class Killstreaks extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		getCommand("killstreaks").setExecutor(new CommandHandler());
-		getServer().getPluginManager().registerEvents(new EventListener(), this);
+		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		this.actionbar = new Actionbar();
 		/*File configFile = new File(getDataFolder(), "config.yml");
 		//If newer version was found, update configuration.

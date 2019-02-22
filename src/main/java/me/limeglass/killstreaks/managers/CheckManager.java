@@ -21,13 +21,7 @@ public class CheckManager {
 	}
 	
 	public static boolean call(EntityDamageByEntityEvent event, FileConfiguration configuration) {
-		return checks.stream()
-				.map(checker -> {
-					if (checker.getConfiguration() == null) {
-						checker.setConfiguration(configuration);
-					}
-					return checker;
-				}).allMatch(checker -> checker.check(event));
+		return checks.stream().allMatch(checker -> checker.check(event));
 	}
 	
 }

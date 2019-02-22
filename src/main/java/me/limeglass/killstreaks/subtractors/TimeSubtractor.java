@@ -5,26 +5,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.limeglass.killstreaks.Killstreaks;
 import me.limeglass.killstreaks.objects.KillstreakSubtractor;
 
 public class TimeSubtractor extends KillstreakSubtractor {
 
 	static {
-		time = Killstreaks.getInstance().getConfig().getInt("killstreaks.time.subtraction-time", 10);
 		registerSubtractor("Time", TimeSubtractor.class);
 	}
 	
 	private BukkitTask timer;
-	private static int time;
+	private final int time;
 	
 	public TimeSubtractor(Player player) {
 		super(player);
+		time = configuration.getInt("killstreaks.time.subtraction-time", 10);
 	}
 
 	@Override
 	public void onStart(EntityDamageByEntityEvent event) {
-		timer = Bukkit.getScheduler().runTaskLaterAsynchronously(Killstreaks.getInstance(), new Runnable() {
+		timer = Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
 			@Override
 			public void run() {
 				finish();

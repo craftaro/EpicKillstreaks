@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import me.limeglass.killstreaks.managers.ActionManager;
 import me.limeglass.killstreaks.managers.CheckManager;
@@ -18,6 +19,12 @@ import me.limeglass.killstreaks.objects.KillstreakSubtractor;
 
 public class KillstreaksAPI {
 
+	private final Plugin plugin;
+	
+	public KillstreaksAPI(Plugin plugin) {
+		this.plugin = plugin;
+	}
+	
 	/**
 	 * Register a subtractor to Killstreaks.
 	 * Subtractors are what subtract the killstreaks over time or any way needed.
@@ -28,7 +35,7 @@ public class KillstreaksAPI {
 	 * @param subtractor The class that extends KillstreakSubtractor
 	 * @return The registered Class<? extends KillstreakSubtractor>
 	 */
-	public static Class<? extends KillstreakSubtractor> registerSubtractor(String name, Class<? extends KillstreakSubtractor> subtractor) {
+	public Class<? extends KillstreakSubtractor> registerSubtractor(String name, Class<? extends KillstreakSubtractor> subtractor) {
 		return SubtractorManager.registerSubtractor(name, subtractor);
 	}
 	
@@ -38,7 +45,7 @@ public class KillstreaksAPI {
 	 * 
 	 * @param action The KillstreakAction object to register.
 	 */
-	public static boolean registerAction(KillstreakAction action) {
+	public boolean registerAction(KillstreakAction action) {
 		return ActionManager.registerAction(action);
 	}
 	
@@ -48,21 +55,21 @@ public class KillstreaksAPI {
 	 * 
 	 * @param check The KillstreakCheck object to register.
 	 */
-	public static boolean registerCheck(KillstreakCheck check) {
+	public boolean registerCheck(KillstreakCheck check) {
 		return CheckManager.registerCheck(check);
 	}
 	
 	/**
 	 * @return Collection<Class<? extends KillstreakSubtractor>> of all the registered classes of KillstreakSubtractor.
 	 */
-	public static Collection<Class<? extends KillstreakSubtractor>> getSubtractors() {
+	public Collection<Class<? extends KillstreakSubtractor>> getSubtractors() {
 		return Collections.unmodifiableCollection(SubtractorManager.getSubtractors().values());
 	}
 	
 	/**
 	 * @return List<KillstreakSubtractor> of all the running KillstreakSubtractor.
 	 */
-	public static List<KillstreakSubtractor> getRunningSubtractors() {
+	public List<KillstreakSubtractor> getRunningSubtractors() {
 		return SubtractorManager.getRunningSubtractors();
 	}
 	
@@ -72,22 +79,31 @@ public class KillstreaksAPI {
 	 * @param player The Player to grab a Killstreak of.
 	 * @return The Killstreak object.
 	 */
-	public static Killstreak getKillstreak(Player player) {
+	public Killstreak getKillstreak(Player player) {
 		return KillstreakManager.getKillstreak(player);
 	}
 	
 	/**
 	 * @return Set<KillstreakAcion> of all the registered KillstreakActions.
 	 */
-	public static Set<KillstreakAction> getActions() {
+	public Set<KillstreakAction> getActions() {
 		return ActionManager.getActions();
 	}
 	
 	/**
 	 * @return Set<KillstreakCheck> of all the registered KillstreakChecks.
 	 */
-	public static Set<KillstreakCheck> getChecks() {
+	public Set<KillstreakCheck> getChecks() {
 		return CheckManager.getChecks();
+	}
+
+	/**
+	 * Grabs the plugin this KillstreakAPI is registered towards.
+	 * 
+	 * @return The Plugin registered to this instance.
+	 */
+	public Plugin getPlugin() {
+		return plugin;
 	}
 	
 }

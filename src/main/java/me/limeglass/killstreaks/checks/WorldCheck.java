@@ -13,7 +13,7 @@ public class WorldCheck extends KillstreakCheck {
 
 	@Override
 	public boolean check(EntityDamageByEntityEvent event) {
-		CheckReader reader = new CheckReader("world-blacklist");
+		CheckReader reader = new CheckReader("world-blacklist", configuration);
 		if (reader.isValid() && reader.isEnabled()) {
 			boolean contains = reader.getList().parallelStream()
 					.anyMatch(name -> event.getDamager().getWorld().getName().equalsIgnoreCase(name));

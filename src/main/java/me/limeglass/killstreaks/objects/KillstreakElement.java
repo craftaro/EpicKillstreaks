@@ -2,12 +2,16 @@ package me.limeglass.killstreaks.objects;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+import me.limeglass.killstreaks.Killstreaks;
+
 public abstract class KillstreakElement {
 
-	private FileConfiguration configuration;
+	protected final FileConfiguration configuration;
+	protected final Killstreaks instance;
 	
-	public void setConfiguration(FileConfiguration configuration) {
-		this.configuration = configuration;
+	public KillstreakElement() {
+		this.instance = Killstreaks.getInstance();
+		this.configuration = instance.getConfig();
 	}
 	
 	public FileConfiguration getConfiguration() {

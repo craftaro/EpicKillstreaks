@@ -28,7 +28,7 @@ public class CommandHandler implements CommandExecutor {
 		} else {
 			//player.sendMessage(Utils.getMessage(false, "commandhelp", player));
 		}*/
-		player.sendMessage(Utils.cc("&6Coming soon."));
+		player.sendMessage(Utils.cc("&6TODO."));
 		return true;
 	}
 

@@ -45,7 +45,6 @@ public class SubtractorManager {
 				.forEach(clazz -> {
 					try {
 						KillstreakSubtractor subtractor = clazz.getConstructor(Player.class).newInstance(player);
-						subtractor.setConfiguration(configuration);
 						subtractor.setKillstreak(killstreak);
 						if (running.contains(subtractor)) {
 							subtractor.interrupt(event);
