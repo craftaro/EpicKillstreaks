@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -54,7 +52,7 @@ public class SubtractorManager {
 						running.add(subtractor);
 						subtractor.onStart(event);
 					} catch (NoSuchMethodException e) {
-						Killstreaks.getInstance().getLogger().log(Level.SEVERE, "A subtractor must have a Player.class constructor");
+						Killstreaks.consoleMessage("&cA subtractor must have a Player.class constructor");
 						e.printStackTrace();
 					} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
 						e.printStackTrace();

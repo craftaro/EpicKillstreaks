@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
-
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,90 +19,92 @@ import com.google.gson.GsonBuilder;
 import me.limeglass.killstreaks.Killstreaks;
 
 public class Storage {
-	
-	private static File file  = new File(Killstreaks.getInstance().getDataFolder(), "storage.csv");
-	private static final String NEW_LINE = "\n";
-	private static final String DELIMITER = ": ";
-	private static FileWriter writer = null;
-	private static GsonBuilder gsonBuilder = new GsonBuilder();
-	private static Gson gson;
-	public static TreeMap<String, Object> data = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
-	private static Boolean loadingHash = false;
-	private static BukkitTask task;
 
-	//TODO Add a read lock to the file.
-	
-	public static FileWriter getWriter() {
-		return writer;
-	}
-	
-	public static Object get(String ID) {
-		return data.get(ID);
-	}
-	
-	public static Integer getSize() {
-		return data.size();
-	}
-	
-	public static void save(Boolean running, Boolean reboot) {
-		//running shuts down the stream
-		//reboot is for an interval saver
-		if (running) {
+	private final Map<String, Object> data = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private final String DELIMITER = ": ";
+	private final String NEW_LINE = "\n";
+	private final File file, backups;
+	private FileWriter writer;
+	private final Gson gson;
+	private boolean loading;
+
+	public Storage(Killstreaks instance) {
+		this.backups = new File(instance.getDataFolder() + File.separator + "backups");
+		if (!backups.exists())
+			backups.mkdir();
+		this.file = new File(instance.getDataFolder(), "storage.csv");
+		this.gson = new GsonBuilder()
+				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+				.create();
+		Bukkit.getScheduler().runTaskTimerAsynchronously(instance, new Runnable() {
+			@Override
+			public void run() {
+				Killstreaks.consoleMessage("Data has been saved!");
+				save(true);
+			}
+		}, 1, (20 * 60) * instance.getConfig().getInt("database.backup-timer", 60)); //60 minutes by default
+		if (file.exists()) {
+			load();
+			return;
+		}
+		try {
+			writer = new FileWriter(file);
+			writer.append(NEW_LINE);
+			writer.append("# Killstreaks flat file database.");
+			writer.append(NEW_LINE);
+			writer.append("# Please do not modify this file manually, thank you!");
+			writer.append(NEW_LINE);
+			writer.append(NEW_LINE);
+			Killstreaks.debugMessage("Successfully created CSV storage database!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				writer.close();
+				writer.flush();
 			} catch (IOException e) {
+				Killstreaks.debugMessage("Error flushing data during setup!");
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void close() {
+		save(false);
+	}
+
+	public Integer getSize() {
+		return data.size();
+	}
+
+	public Object get(String ID) {
+		return data.get(ID);
+	}
+
+	public FileWriter getWriter() {
+		return writer;
+	}
+
+	public void save(boolean reboot) {
+		try {
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Date date = new Date();
-		File newFile = new File(Killstreaks.getInstance().getDataFolder() + File.separator + "backups" + File.separator + date.toString().replaceAll(":", "-") + ".csv");
+		File newFile = new File(backups, date.toString().replaceAll(":", "-") + ".csv");
 		try {
 			Files.copy(file.toPath(), newFile.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (reboot) {
-			load();
-		}
+		if (reboot) load();
 	}
 	
-	public static void setup() {
-		new File(Killstreaks.getInstance().getDataFolder() + File.separator + "backups").mkdir();
-		if (task != null) Bukkit.getScheduler().cancelTask(task.getTaskId());
-		run();
-		file = new File(Killstreaks.getInstance().getDataFolder(), "storage.csv");
-		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY);
-		gson = gsonBuilder.create();
-		if (!file.exists()) {
-			try {
-				writer = new FileWriter(file);
-				writer.append(NEW_LINE);
-				writer.append("# Killstreaks flat file database.");
-				writer.append(NEW_LINE);
-				writer.append("# Please do not modify this file manually, thank you!");
-				writer.append(NEW_LINE);
-				writer.append(NEW_LINE);
-				Killstreaks.debugMessage("Successfully created CSV storage database!");
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					writer.flush();
-				} catch (IOException e) {
-					Killstreaks.debugMessage("Error flushing data during setup!");
-					e.printStackTrace();
-				}
-			}
-		} else {
-			load();
-		}
-	}
-	
-	private static void load() {
+	private void load() {
 		String line = "";
 		BufferedReader reader = null;
 		try {
-			ArrayList<String[]> data = new ArrayList<String[]>();
+			List<String[]> data = new ArrayList<>();
 			reader = new BufferedReader(new FileReader(file));
 			for (int i = 0; i < 4; i ++) {
 				reader.readLine();
@@ -133,8 +135,8 @@ public class Storage {
 		}
 	}
 	
-	private static void loadFromHash() {
-		loadingHash = true;
+	private void loadFromHash() {
+		loading = true;
 		try {
 			writer = new FileWriter(file);
 			writer.append(NEW_LINE);
@@ -158,27 +160,28 @@ public class Storage {
 				e.printStackTrace();
 			}
 		}
-		loadingHash = false;
+		loading = false;
 	}
 	
-	public static void remove(String ID) {
-		if (data.containsKey(ID)) {
-			if (!loadingHash) {
-				try {
-					getWriter().close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				data.remove(ID);
-				loadFromHash();
-			}
+	public void remove(String ID) {
+		if (!data.containsKey(ID))
+			return;
+		if (loading)
+			return;
+		try {
+			getWriter().close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		data.remove(ID);
+		loadFromHash();
 	}
 	
-	public static void write(String ID, Object value) {
-		if (ID == null || value == null) return;
+	public void write(String ID, Object value) {
+		if (ID == null || value == null)
+			return;
 		if (data.containsKey(ID)) {
-			if (!loadingHash) {
+			if (!loading) {
 				try {
 					getWriter().close();
 				} catch (IOException e) {
@@ -205,14 +208,5 @@ public class Storage {
 			}
 		}
 	}
-	
-	public static void run() {
-		task = Bukkit.getScheduler().runTaskTimerAsynchronously(Killstreaks.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				Killstreaks.consoleMessage("Data has been saved!");
-				save(true, true);
-			}
-		}, 1, (20 * 60) * Killstreaks.getInstance().getConfig().getInt("database.backup-timer", 60)); //60 minutes by default
-	}
+
 }
