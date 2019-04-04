@@ -25,7 +25,7 @@ killstreaks:
     # Time is a simple and basic time measurement. It decreases the killstreaks based on time.
     time:
         # The time in seconds it takes for a Killstreak to be subtracted after being gained.
-        subtraction-time: 20
+        subtraction-time: 100
     # Combat will determine times when the user is or isn't in combat for Killstreaks.
     combat:
         # When the attacker deals damage, should time be added?

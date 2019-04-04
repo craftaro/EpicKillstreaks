@@ -25,7 +25,7 @@ killstreaks:
     # Time is a simple and basic time measurement. It decreases the killstreaks based on time.
     time:
         # The time in seconds it takes for a Killstreak to be subtracted after being gained.
-        subtraction-time: 20
+        subtraction-time: 100
     # Combat will determine times when the user is or isn't in combat for Killstreaks.
     combat:
         # When the attacker deals damage, should time be added?
@@ -95,6 +95,27 @@ effects:
     # Sounds for the Killstreaks.
     sound:
         enabled: true
+        # At which streaks should the message be broadcasted.
+        streaks:
+            - 3
+            - 5
+            - 10
+            - 15
+            - 20
+            - 25
+            - 30
+        # If the sound should only be played to the attacker.
+        attacker-only: true
+        # If the sound should be played to everyone around the attacker.
+        location: false
+        # 1.13 sounds can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+        sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+        # For every streak increament, how much should the volume be raised by.
+        volume-addition: 0.2
+        volume: 0.5
+         # For every streak increament, how much should the pitch be raised by.
+        pitch-addition: 1
+        pitch: 1
     # Any chat related configurations for effects are in here.
     chat:
         # Send a broadcast to the entire server about the killstreak.

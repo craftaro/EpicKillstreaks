@@ -28,8 +28,6 @@ public class TitleAction extends KillstreakAction {
 		Entity victim = event.getEntity();
 		ConfigurationSection section = configuration.getConfigurationSection("effects.title");
 		int streak = killstreak.getStreak();
-		if (!section.getBoolean("enabled", false))
-			return;
 		if (!section.getIntegerList("streaks").contains(streak))
 			return;
 		if (section.getBoolean("radius.enabled", false)) {
@@ -58,9 +56,9 @@ public class TitleAction extends KillstreakAction {
 						.replace("%receiver%", player.getName())
 						.replace("%victim%", victim.getName())
 						.setKillstreak(killstreak);
-				if (player == attacker)
+				if (player == attacker && section.getBoolean("title-self.enabled", false))
 					builder.setNodes("title-self").sendTitle(attacker);
-				else
+				else if (section.getBoolean("title-others.enabled", false))
 					builder.sendTitle(player);
 			}
 		}
