@@ -191,7 +191,7 @@ effects:
             - 25
             - 30
         title-self:
-            enabled: false
+            enabled: true
             title: ""
             subtitle: "&c&lYou're on a Killstreak of %streak%!"
             fadeOut: 20
