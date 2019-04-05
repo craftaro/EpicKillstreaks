@@ -14,15 +14,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 
 import com.songoda.killstreaks.Killstreaks;
-import com.songoda.killstreaks.managers.ActionManager;
-import com.songoda.killstreaks.managers.CheckManager;
-import com.songoda.killstreaks.managers.KillstreakManager;
 import com.songoda.killstreaks.managers.SubtractorManager;
 import com.songoda.killstreaks.objects.Killstreak;
 import com.songoda.killstreaks.objects.KillstreakEvent;
 
 public class EventListener implements Listener {
-	
+
 	private final PluginManager pluginManager;
 	private final Killstreaks instance;
 	
@@ -33,7 +30,7 @@ public class EventListener implements Listener {
 	
 	@EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-		KillstreakManager.clear(event.getPlayer());
+		Killstreaks.getKillstreakManager().clear(event.getPlayer());
     }
 	
 	// We don't need to worry about priority. Just a Killstreak plugin.
@@ -45,13 +42,13 @@ public class EventListener implements Listener {
 			Entity attacker = event.getDamager();
 			if (attacker.getType() == EntityType.PLAYER) {
 				FileConfiguration configuration = instance.getConfig();
-				if (CheckManager.call(event, configuration)) {
+				if (Killstreaks.getCheckManager().call(event, configuration)) {
 					Player player = (Player)attacker;
-					Killstreak killstreak = KillstreakManager.getKillstreak(player);
+					Killstreak killstreak = Killstreaks.getKillstreakManager().getKillstreak(player);
 					KillstreakEvent killstreakEvent = new KillstreakEvent(player, killstreak, killstreak.getStreak() + 1);
 					pluginManager.callEvent(killstreakEvent);
 					if (!killstreakEvent.isCancelled()) {
-						ActionManager.call(event, killstreak.increment(), configuration);
+						Killstreaks.getActionManager().call(event, killstreak.increment(), configuration);
 						SubtractorManager.start(event, killstreak, configuration);
 						Killstreaks.debugMessage("KillstreakEvent was fired for "
 								+ player.getName() + " with a " + killstreak.getStreak() + " killstreak");

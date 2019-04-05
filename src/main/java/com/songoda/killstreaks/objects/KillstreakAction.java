@@ -2,7 +2,7 @@ package com.songoda.killstreaks.objects;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.songoda.killstreaks.managers.ActionManager;
+import com.songoda.killstreaks.Killstreaks;
 
 public abstract class KillstreakAction extends KillstreakElement {
 
@@ -13,7 +13,7 @@ public abstract class KillstreakAction extends KillstreakElement {
 	}
 	
 	protected static void registerAction(KillstreakAction action) {
-		ActionManager.registerAction(action);
+		Killstreaks.getActionManager().registerAction(action);
 	}
 	
 	/**

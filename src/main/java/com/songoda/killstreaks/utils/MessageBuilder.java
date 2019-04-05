@@ -21,7 +21,7 @@ import com.songoda.killstreaks.placeholders.SimplePlaceholder;
 public class MessageBuilder {
 
 	private Map<Placeholder<?>, Object> placeholders = new HashMap<>();
-	private final List<Player> players = new ArrayList<>();
+	private final List<CommandSender> senders = new ArrayList<>();
 	private Object defaultPlaceholderObject;
 	private ConfigurationSection section;
 	private final Killstreaks instance;
@@ -46,8 +46,8 @@ public class MessageBuilder {
 	 * @param senders The Players... to send the message to.
 	 * @return The MessageBuilder for chaining.
 	 */
-	public MessageBuilder toPlayers(Player... players) {
-		this.players.addAll(Sets.newHashSet(players));
+	public MessageBuilder toSenders(CommandSender... senders) {
+		this.senders.addAll(Sets.newHashSet(senders));
 		return this;
 	}
 	
@@ -57,8 +57,8 @@ public class MessageBuilder {
 	 * @param senders The Collection<Player> to send the message to.
 	 * @return The MessageBuilder for chaining.
 	 */
-	public MessageBuilder toPlayers(Collection<? extends Player> players) {
-		this.players.addAll(players);
+	public MessageBuilder toSenders(Collection<? extends CommandSender> senders) {
+		this.senders.addAll(senders);
 		return this;
 	}
 	
@@ -131,7 +131,7 @@ public class MessageBuilder {
 	 * @param players the players to send to
 	 */
 	public void sendActionbar(Player... players) {
-		toPlayers(players).sendActionbar();
+		toSenders(players).sendActionbar();
 	}
 	
 	/**
@@ -140,14 +140,14 @@ public class MessageBuilder {
 	 * @param players the players to send to
 	 */
 	public void sendTitle(Player... players) {
-		toPlayers(players).sendTitle();
+		toSenders(players).sendTitle();
 	}
 	
 	/**
 	 * Sends the final product of the builder.
 	 */
-	public void send(Player... players) {
-		toPlayers(players).send();
+	public void send(CommandSender... senders) {
+		toSenders(senders).send();
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public class MessageBuilder {
 		int stay = section.getInt(nodes[0] + ".stay", 200);
 		title = applyPlaceholders(title).replaceAll("\n", "");
 		subtitle = applyPlaceholders(subtitle).replaceAll("\n", "");
-		Player[] players = this.players.parallelStream()
+		Player[] players = this.senders.parallelStream()
 				.filter(sender -> sender instanceof Player)
 				.toArray(Player[]::new);
 		if (players != null && players.length > 0) {
@@ -236,8 +236,8 @@ public class MessageBuilder {
 		get();
 		complete = complete.replaceAll("\n", "");
 		Actionbar actionbar = instance.getActionbar();
-		if (!players.isEmpty()) {
-			for (CommandSender sender : players) {
+		if (!senders.isEmpty()) {
+			for (CommandSender sender : senders) {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
 					actionbar.sendActionBar(player, complete);
@@ -251,8 +251,8 @@ public class MessageBuilder {
 	 */
 	public void send() {
 		get();
-		if (!players.isEmpty())
-			players.forEach(player -> player.sendMessage(complete));
+		if (!senders.isEmpty())
+			senders.forEach(player -> player.sendMessage(complete));
 	}
 	
 }

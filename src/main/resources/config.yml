@@ -1,15 +1,15 @@
-#!        
-#!       ▄█   ▄█▄  ▄█   ▄█        ▄█          ▄████████     ███        ▄████████    ▄████████    ▄████████    ▄█   ▄█▄    ▄████████ 
-#!      ███ ▄███▀ ███  ███       ███         ███    ███ ▀█████████▄   ███    ███   ███    ███   ███    ███   ███ ▄███▀   ███    ███ 
-#!      ███▐██▀   ███▌ ███       ███         ███    █▀     ▀███▀▀██   ███    ███   ███    █▀    ███    ███   ███▐██▀     ███    █▀  
-#!     ▄█████▀    ███▌ ███       ███         ███            ███   ▀  ▄███▄▄▄▄██▀  ▄███▄▄▄       ███    ███  ▄█████▀      ███        
-#!    ▀▀█████▄    ███▌ ███       ███       ▀███████████     ███     ▀▀███▀▀▀▀▀   ▀▀███▀▀▀     ▀███████████ ▀▀█████▄    ▀███████████ 
-#!      ███▐██▄   ███  ███       ███                ███     ███     ▀███████████   ███    █▄    ███    ███   ███▐██▄            ███ 
-#!      ███ ▀███▄ ███  ███▌    ▄ ███▌    ▄    ▄█    ███     ███       ███    ███   ███    ███   ███    ███   ███ ▀███▄    ▄█    ███ 
-#!      ███   ▀█▀ █▀   █████▄▄██ █████▄▄██  ▄████████▀     ▄████▀     ███    ███   ██████████   ███    █▀    ███   ▀█▀  ▄████████▀  
-#!      ▀              ▀         ▀                                    ███    ███                             ▀                      
+
 # Print additional information in the console. Useful for figuring out errors and issues.
 debug: false
+
+messages:
+    reloading: "&7[&cKillstreaks&7] &6Reloading Killstreak's configurations..."
+    reloaded: "&7[&cKillstreaks&7] &6Reloaded Killstreaks."
+    player-only: "&cOnly players can execute the killstreak check command, console can only access /killstreaks reload"
+    killstreak: "&7[&cKillstreaks&7] Your current Killstreak is &c%killstreak%&7."
+    no-permissions: "&7[&cKillstreaks&7] &cYou don't have to correct permissions to execute this command."
+    no-player-found: "&7[&cKillstreaks&7] &cNo player found under the name %player% that was online."
+    killstreak-other: "&7[&cKillstreaks&7] %player%'s current Killstreak is &c%killstreak%&7."
 
 # Configuration for the main Killstreaks.
 killstreaks:

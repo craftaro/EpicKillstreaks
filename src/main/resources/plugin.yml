@@ -1,18 +1,22 @@
-name: Killstreaks
-author: LimeGlass
+name: EpicKillstreaks
+author: [LimeGlass, Songoda]
 description: Add Killstreaks to Minecraft.
-version: 1.0.0
-main: me.limeglass.killstreaks.Killstreaks
+version: @version@
+main: com.songoda.killstreaks.Killstreaks
 commands:
   killstreaks:
     description: Killstreaks main command.
+    aliases: [epickillstreaks, ek, killstreak]
     usage: /killstreaks
-    permission: killstreaks.use
 permissions:
-  killstreaks.*:
+  epickillstreaks.*:
     description: Gives access to all Killstreaks commands.
     children:
-      killstreaks.admin: true
-  killstreaks.admin:
-    description: Gives access to setup killstreaks and other components.
+      epickillstreaks.other: true
+      epickillstreaks.check: true
+  epickillstreaks.check:
+    description: Gives access for a player to check their own killstreaks.
+    default: op
+  epickillstreaks.other:
+    description: Gives access to check other player's killstreaks.
     default: op

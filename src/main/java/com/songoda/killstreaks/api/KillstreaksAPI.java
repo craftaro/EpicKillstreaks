@@ -8,9 +8,8 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import com.songoda.killstreaks.managers.ActionManager;
+import com.songoda.killstreaks.Killstreaks;
 import com.songoda.killstreaks.managers.CheckManager;
-import com.songoda.killstreaks.managers.KillstreakManager;
 import com.songoda.killstreaks.managers.SubtractorManager;
 import com.songoda.killstreaks.objects.Killstreak;
 import com.songoda.killstreaks.objects.KillstreakAction;
@@ -20,11 +19,11 @@ import com.songoda.killstreaks.objects.KillstreakSubtractor;
 public class KillstreaksAPI {
 
 	private final Plugin plugin;
-	
+
 	public KillstreaksAPI(Plugin plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	/**
 	 * Register a subtractor to Killstreaks.
 	 * Subtractors are what subtract the killstreaks over time or any way needed.
@@ -38,7 +37,7 @@ public class KillstreaksAPI {
 	public Class<? extends KillstreakSubtractor> registerSubtractor(String name, Class<? extends KillstreakSubtractor> subtractor) {
 		return SubtractorManager.registerSubtractor(name, subtractor);
 	}
-	
+
 	/**
 	 * Register an action to Killstreaks
 	 * Actions are extendible effects that get triggered on Killstreaks.
@@ -46,9 +45,9 @@ public class KillstreaksAPI {
 	 * @param action The KillstreakAction object to register.
 	 */
 	public boolean registerAction(KillstreakAction action) {
-		return ActionManager.registerAction(action);
+		return Killstreaks.getActionManager().registerAction(action);
 	}
-	
+
 	/**
 	 * Register a check to Killstreaks
 	 * Checks are conditions that allows a Killstreak to levelup.
@@ -58,21 +57,21 @@ public class KillstreaksAPI {
 	public boolean registerCheck(KillstreakCheck check) {
 		return CheckManager.registerCheck(check);
 	}
-	
+
 	/**
 	 * @return Collection<Class<? extends KillstreakSubtractor>> of all the registered classes of KillstreakSubtractor.
 	 */
 	public Collection<Class<? extends KillstreakSubtractor>> getSubtractors() {
 		return Collections.unmodifiableCollection(SubtractorManager.getSubtractors().values());
 	}
-	
+
 	/**
 	 * @return List<KillstreakSubtractor> of all the running KillstreakSubtractor.
 	 */
 	public List<KillstreakSubtractor> getRunningSubtractors() {
 		return SubtractorManager.getRunningSubtractors();
 	}
-	
+
 	/**
 	 * Grabs a player's current Killstreak.
 	 * 
@@ -80,21 +79,21 @@ public class KillstreaksAPI {
 	 * @return The Killstreak object.
 	 */
 	public Killstreak getKillstreak(Player player) {
-		return KillstreakManager.getKillstreak(player);
+		return Killstreaks.getKillstreakManager().getKillstreak(player);
 	}
-	
+
 	/**
 	 * @return Set<KillstreakAcion> of all the registered KillstreakActions.
 	 */
 	public Set<KillstreakAction> getActions() {
-		return ActionManager.getActions();
+		return Killstreaks.getActionManager().getActions();
 	}
-	
+
 	/**
 	 * @return Set<KillstreakCheck> of all the registered KillstreakChecks.
 	 */
 	public Set<KillstreakCheck> getChecks() {
-		return CheckManager.getChecks();
+		return Killstreaks.getCheckManager().getChecks();
 	}
 
 	/**
@@ -105,5 +104,5 @@ public class KillstreaksAPI {
 	public Plugin getPlugin() {
 		return plugin;
 	}
-	
+
 }

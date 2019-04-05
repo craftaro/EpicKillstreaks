@@ -16,13 +16,13 @@ public class KillstreakManager {
 		return killstreaks.add(killstreak);
 	}
 	
-	public static void clear(Player player) {
+	public void clear(Player player) {
 		Sets.newConcurrentHashSet(killstreaks).parallelStream()
 				.filter(killstreak -> killstreak.getPlayer() == player)
 				.forEach(killstreak -> killstreaks.remove(killstreak));
 	}
 	
-	public static Killstreak getKillstreak(Player player) {
+	public Killstreak getKillstreak(Player player) {
 		return killstreaks.parallelStream()
 				.filter(killstreak -> killstreak.getPlayer() == player)
 				.findFirst()
@@ -33,8 +33,8 @@ public class KillstreakManager {
 				});
 	}
 	
-	public static Set<Killstreak> getKillstreaks() {
+	public Set<Killstreak> getKillstreaks() {
 		return killstreaks;
 	}
-	
+
 }

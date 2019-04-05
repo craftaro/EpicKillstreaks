@@ -10,17 +10,17 @@ import com.songoda.killstreaks.objects.KillstreakCheck;
 
 public class CheckManager {
 
-	private static Set<KillstreakCheck> checks = new HashSet<>();
+	private final static Set<KillstreakCheck> checks = new HashSet<>();
 	
 	public static boolean registerCheck(KillstreakCheck check) {
 		return checks.add(check);
 	}
 	
-	public static Set<KillstreakCheck> getChecks() {
+	public Set<KillstreakCheck> getChecks() {
 		return checks;
 	}
 	
-	public static boolean call(EntityDamageByEntityEvent event, FileConfiguration configuration) {
+	public boolean call(EntityDamageByEntityEvent event, FileConfiguration configuration) {
 		return checks.stream().allMatch(checker -> checker.check(event));
 	}
 	

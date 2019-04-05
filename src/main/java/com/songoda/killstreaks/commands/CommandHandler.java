@@ -1,33 +1,59 @@
 package com.songoda.killstreaks.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import com.songoda.killstreaks.Killstreaks;
-import com.songoda.killstreaks.utils.Formatting;
+import com.songoda.killstreaks.utils.MessageBuilder;
 
 public class CommandHandler implements CommandExecutor {
 
-	private final Killstreaks instance;
+	private final ConfigurationSection section;
 
 	public CommandHandler(Killstreaks instance) {
-		this.instance = instance;
+		this.section = instance.getConfig().getConfigurationSection("messages");
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length <= 0) {
-			sender.sendMessage("");
-			sender.sendMessage("&7[&6Killstreaks&7]");
-			sender.sendMessage(Formatting.color("	&6/killstreaks reload"));
-			sender.sendMessage("");
-		} else if (!sender.hasPermission("epickillstreaks.reload")) {
-			sender.sendMessage(Formatting.color("&cYou don't have to correct permissions to execute this command."));
+		if (args.length == 0) {
+			if (!(sender instanceof Player))
+				new MessageBuilder(section, "player-only")
+						.setPlaceholderObject(sender)
+						.send(sender);
+			if (!sender.hasPermission("epickillstreaks.check")) {
+				new MessageBuilder(section, "no-permission")
+						.setPlaceholderObject(sender)
+						.send(sender);
+				return true;
+			}
+			Player player = (Player) sender;
+			new MessageBuilder(section, "killstreak")
+					.replace("%killstreak%", Killstreaks.getKillstreakManager().getKillstreak(player).getStreak())
+					.setPlaceholderObject(sender)
+					.send(sender);
 		} else {
-			sender.sendMessage(Formatting.color("&6Reloading Killstreaks."));
-			instance.getServer().getPluginManager().disablePlugin(instance);
-			instance.getServer().getPluginManager().enablePlugin(instance);
+			Player player = Bukkit.getPlayer(args[0]);
+			if (player == null) {
+				new MessageBuilder(section, "no-player-found")
+						.replace("%player%", args[0])
+						.send(sender);
+				return true;
+			}
+			if (!sender.hasPermission("epickillstreaks.other")) {
+				new MessageBuilder(section, "no-permission")
+						.setPlaceholderObject(sender)
+						.send(sender);
+				return true;
+			}
+			new MessageBuilder(section, "killstreak-other")
+					.replace("%killstreak%", Killstreaks.getKillstreakManager().getKillstreak(player).getStreak())
+					.replace("%player%", player.getName())
+					.send(sender);
 		}
 		return true;
 	}
