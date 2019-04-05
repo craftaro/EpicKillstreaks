@@ -15,6 +15,7 @@
 *.war
 *.nar
 *.settings
+*.gradle
 *.ear
 *.zip
 *.tar.gz
