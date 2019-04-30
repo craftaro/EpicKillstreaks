@@ -12,7 +12,7 @@ build:
   script:
     - gradle --build-cache assemble
     - find $path/ -depth -path '*original*' -delete
-    - mv $path/target/*.jar $path/
+    - mv $path/build/libs/*.jar $path/
   artifacts:
     name: $name-$version
     paths:
