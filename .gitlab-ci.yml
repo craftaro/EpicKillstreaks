@@ -10,7 +10,7 @@ build:
   stage: build
   image: gradle:alpine
   script:
-    - mvn clean package
+    - gradle --build-cache assemble
     - find $path/ -depth -path '*original*' -delete
     - mv $path/target/*.jar $path/
   artifacts:
