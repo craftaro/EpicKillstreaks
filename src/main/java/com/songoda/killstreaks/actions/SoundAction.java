@@ -15,7 +15,7 @@ public class SoundAction extends KillstreakAction {
 	static {
 		registerAction(new SoundAction());
 	}
-	
+
 	public SoundAction() {
 		super("Sound");
 	}

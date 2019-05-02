@@ -18,9 +18,11 @@ import com.songoda.killstreaks.objects.KillstreakSubtractor;
 
 public class KillstreaksAPI {
 
+	private final Killstreaks instance;
 	private final Plugin plugin;
 
 	public KillstreaksAPI(Plugin plugin) {
+		this.instance = Killstreaks.getInstance();
 		this.plugin = plugin;
 	}
 
@@ -45,7 +47,7 @@ public class KillstreaksAPI {
 	 * @param action The KillstreakAction object to register.
 	 */
 	public boolean registerAction(KillstreakAction action) {
-		return Killstreaks.getActionManager().registerAction(action);
+		return instance.getActionManager().registerAction(action);
 	}
 
 	/**
@@ -79,21 +81,21 @@ public class KillstreaksAPI {
 	 * @return The Killstreak object.
 	 */
 	public Killstreak getKillstreak(Player player) {
-		return Killstreaks.getKillstreakManager().getKillstreak(player);
+		return instance.getKillstreakManager().getKillstreak(player);
 	}
 
 	/**
 	 * @return Set<KillstreakAcion> of all the registered KillstreakActions.
 	 */
 	public Set<KillstreakAction> getActions() {
-		return Killstreaks.getActionManager().getActions();
+		return instance.getActionManager().getActions();
 	}
 
 	/**
 	 * @return Set<KillstreakCheck> of all the registered KillstreakChecks.
 	 */
 	public Set<KillstreakCheck> getChecks() {
-		return Killstreaks.getCheckManager().getChecks();
+		return instance.getCheckManager().getChecks();
 	}
 
 	/**

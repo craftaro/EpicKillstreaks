@@ -30,7 +30,7 @@ public class EventListener implements Listener {
 	
 	@EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
-		Killstreaks.getKillstreakManager().clear(event.getPlayer());
+		instance.getKillstreakManager().clear(event.getPlayer());
     }
 	
 	// We don't need to worry about priority. Just a Killstreak plugin.
@@ -42,13 +42,13 @@ public class EventListener implements Listener {
 			Entity attacker = event.getDamager();
 			if (attacker.getType() == EntityType.PLAYER) {
 				FileConfiguration configuration = instance.getConfig();
-				if (Killstreaks.getCheckManager().call(event, configuration)) {
+				if (instance.getCheckManager().call(event, configuration)) {
 					Player player = (Player)attacker;
-					Killstreak killstreak = Killstreaks.getKillstreakManager().getKillstreak(player);
+					Killstreak killstreak = instance.getKillstreakManager().getKillstreak(player);
 					KillstreakEvent killstreakEvent = new KillstreakEvent(player, killstreak, killstreak.getStreak() + 1);
 					pluginManager.callEvent(killstreakEvent);
 					if (!killstreakEvent.isCancelled()) {
-						Killstreaks.getActionManager().call(event, killstreak.increment(), configuration);
+						instance.getActionManager().call(event, killstreak.increment(), configuration);
 						SubtractorManager.start(event, killstreak, configuration);
 						Killstreaks.debugMessage("KillstreakEvent was fired for "
 								+ player.getName() + " with a " + killstreak.getStreak() + " killstreak");

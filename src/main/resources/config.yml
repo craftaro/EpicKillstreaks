@@ -115,6 +115,8 @@ effects:
     chat:
         # Send a broadcast to the entire server about the killstreak.
         broadcast:
+            # If the player receiving the broadcast is the player, should the message be the chat.message.message option?
+            use-message-for-self: true
             enabled: false
             # At which streaks should the message be broadcasted.
             streaks:
@@ -204,5 +206,27 @@ effects:
             x-radius: 20
             y-radius: 20
             z-radius: 20
+    # Requires Vault to be installed.
+    economy:
+        enabled: false
+        # At which streaks should money be awarded, and the amount.
+        attacker-streaks:
+            3: 5
+            5: 25
+            10: 50
+            15: 100
+            20: 200
+            25: 500
+            30: 1000
+        victim-remove: false
+        # If the attacker is at any of these streaks, remove the amount from the victims balance if victim-remove is true.
+        victim-streaks:
+            3: 5
+            5: 25
+            10: 50
+            15: 100
+            20: 200
+            25: 500
+            30: 1000
         
 

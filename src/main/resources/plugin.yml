@@ -3,6 +3,7 @@ author: [LimeGlass, Songoda]
 description: Add Killstreaks to Minecraft.
 version: @version@
 main: com.songoda.killstreaks.Killstreaks
+softdepend: [Vault]
 commands:
   killstreaks:
     description: Killstreaks main command.

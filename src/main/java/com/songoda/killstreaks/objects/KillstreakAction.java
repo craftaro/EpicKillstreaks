@@ -13,7 +13,7 @@ public abstract class KillstreakAction extends KillstreakElement {
 	}
 	
 	protected static void registerAction(KillstreakAction action) {
-		Killstreaks.getActionManager().registerAction(action);
+		Killstreaks.getInstance().getActionManager().registerAction(action);
 	}
 	
 	/**

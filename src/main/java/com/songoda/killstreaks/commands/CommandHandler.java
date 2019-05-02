@@ -13,9 +13,11 @@ import com.songoda.killstreaks.utils.MessageBuilder;
 public class CommandHandler implements CommandExecutor {
 
 	private final ConfigurationSection section;
+	private final Killstreaks instance;
 
 	public CommandHandler(Killstreaks instance) {
 		this.section = instance.getConfig().getConfigurationSection("messages");
+		this.instance = instance;
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class CommandHandler implements CommandExecutor {
 			}
 			Player player = (Player) sender;
 			new MessageBuilder(section, "killstreak")
-					.replace("%killstreak%", Killstreaks.getKillstreakManager().getKillstreak(player).getStreak())
+					.replace("%killstreak%", instance.getKillstreakManager().getKillstreak(player).getStreak())
 					.setPlaceholderObject(sender)
 					.send(sender);
 		} else {
@@ -51,7 +53,7 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 			new MessageBuilder(section, "killstreak-other")
-					.replace("%killstreak%", Killstreaks.getKillstreakManager().getKillstreak(player).getStreak())
+					.replace("%killstreak%", instance.getKillstreakManager().getKillstreak(player).getStreak())
 					.replace("%player%", player.getName())
 					.send(sender);
 		}

@@ -15,7 +15,7 @@ public class BroadcastAction extends KillstreakAction {
 	static {
 		registerAction(new BroadcastAction());
 	}
-	
+
 	public BroadcastAction() {
 		super("Broadcast");
 	}
@@ -29,11 +29,19 @@ public class BroadcastAction extends KillstreakAction {
 		ConfigurationSection section = configuration.getConfigurationSection("effects.chat");
 		int streak = killstreak.getStreak();
 		if (!section.getBoolean("broadcast.enabled", false)) {
-			section = section.getConfigurationSection("broadcast");
 			if (!section.getIntegerList("streaks").contains(streak))
 				return;
 			for (Player player : Bukkit.getOnlinePlayers()) {
-				new MessageBuilder(section, "message")
+				if (player.equals(attacker) && configuration.getBoolean("broadcast.use-message-for-self", true)) {
+					new MessageBuilder(section, "message.message")
+							.replace("%attacker%", attacker.getName())
+							.replace("%receiver%", player.getName())
+							.replace("%victim%", victim.getName())
+							.setKillstreak(killstreak)
+							.send(player);
+					continue;
+				}
+				new MessageBuilder(section, "broadcast.message")
 						.replace("%attacker%", attacker.getName())
 						.replace("%receiver%", player.getName())
 						.replace("%victim%", victim.getName())

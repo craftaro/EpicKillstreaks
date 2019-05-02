@@ -15,7 +15,7 @@ public class ActionbarAction extends KillstreakAction {
 	static {
 		registerAction(new ActionbarAction());
 	}
-	
+
 	public ActionbarAction() {
 		super("Action");
 	}
@@ -65,5 +65,5 @@ public class ActionbarAction extends KillstreakAction {
 				builder.sendActionbar(player);
 		}
 	}
-	
+
 }

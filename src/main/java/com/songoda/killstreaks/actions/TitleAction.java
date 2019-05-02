@@ -15,7 +15,7 @@ public class TitleAction extends KillstreakAction {
 	static {
 		registerAction(new TitleAction());
 	}
-	
+
 	public TitleAction() {
 		super("Title");
 	}
