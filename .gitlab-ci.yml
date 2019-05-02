@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  name: "UltimateModeration"
+  path: "/builds/$CI_PROJECT_PATH"
+  version: "1.1"
+
+build:
+  stage: build
+  image: gradle:alpine
+  script:
+    - gradle --build-cache assemble
+    - find $path/ -depth -path '*original*' -delete
+    - mv $path/build/libs/*.jar $path/
+  artifacts:
+    name: $name-$version
+    paths:
+      - "$path/*.jar"
